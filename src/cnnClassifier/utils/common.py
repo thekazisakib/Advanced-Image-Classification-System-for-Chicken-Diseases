@@ -1,5 +1,5 @@
 import os
-from box.exceptions import BoxValidatorError
+from box.exceptions import BoxValueError
 import yaml
 from cnnClassifier import logger
 import json
@@ -11,17 +11,21 @@ from typing import Any
 import base64
 
 
+
 @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
-    """read yaml file and returns
-    
+    """reads yaml file and returns
+
     Args:
-       path_to_yaml (str): path like input
-    
+        path_to_yaml (str): path like input
+
     Raises:
-       ConfigBox: ConfigBox type
+        ValueError: if yaml file is empty
+        e: empty file
+
+    Returns:
+        ConfigBox: ConfigBox type
     """
-    
     try:
         with open(path_to_yaml) as yaml_file:
             content = yaml.safe_load(yaml_file)
@@ -32,6 +36,8 @@ def read_yaml(path_to_yaml: Path) -> ConfigBox:
     except Exception as e:
         raise e
     
+
+
 @ensure_annotations
 def create_directories(path_to_directories: list, verbose=True):
     """create list of directories
@@ -129,4 +135,3 @@ def decodeImage(imgstring, fileName):
 def encodeImageIntoBase64(croppedImagePath):
     with open(croppedImagePath, "rb") as f:
         return base64.b64encode(f.read())
-        
